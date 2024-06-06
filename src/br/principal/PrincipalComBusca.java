@@ -1,5 +1,6 @@
 package br.principal;
 
+import br.com.alura.screenmatch.excecao.ErroConvercaoDeAnoException;
 import br.com.alura.screenmatch.modelos.Titulo;
 import br.com.alura.screenmatch.modelos.TituloOmdb;
 import com.google.gson.FieldNamingPolicy;
@@ -19,7 +20,9 @@ public class PrincipalComBusca {
         System.out.println("Digite um filme para busca: ");
         var busca = leitura.nextLine();
 
-        String endereco = "https://www.omdbapi.com/?t=" + busca.replace(" ", "+") + "&apikey=27ce6fd6";
+        var endereco = "https://www.omdbapi.com/?t=" + busca.replace(" ", "+") + "&apikey=27ce6fd6";
+
+        try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(endereco))
@@ -39,6 +42,13 @@ public class PrincipalComBusca {
             Titulo meuTitulo = new Titulo(meuTituloOmdb);
             System.out.println("Titulo já convertido");
             System.out.println(meuTitulo);
-
+        } catch (NumberFormatException e){
+            System.out.println("Houve um erro!");
+            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e){
+            System.out.println("Algum erro de argumento. Verifique o endereço!");
+        } catch ( ErroConvercaoDeAnoException e){
+            System.out.println(e.getMensagem());
+        }
     }
 }
